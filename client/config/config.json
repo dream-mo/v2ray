@@ -1,0 +1,90 @@
+{
+  "log": {
+    "error": "",
+    "loglevel": "debug",
+    "access": ""
+  },
+  "inbounds": [
+    {
+      "listen": "0.0.0.0",
+      "protocol": "socks",
+      "settings": {
+        "udp": false,
+        "auth": "noauth"
+      },
+      "port": "1080"
+    },
+    {
+      "listen": "0.0.0.0",
+      "protocol": "http",
+      "settings": {
+        "timeout": 360
+      },
+      "port": "1088"
+    }
+  ],
+  "outbounds": [
+    {
+      "mux": {
+        "enabled": false,
+        "concurrency": 1024
+      },
+      "protocol": "vmess",
+      "streamSettings": {
+        "tcpSettings": {
+          "header": {
+            "type": "none"
+          }
+        },
+        "tlsSettings": {
+          "allowInsecure": true
+        },
+        "security": "none",
+        "network": "tcp"
+      },
+      "tag": "proxy",
+      "settings": {
+        "vnext": [
+          {
+            "address": "39.108.175.92",
+            "users": [
+              {
+                "id": "b831381d-6324-4d53-ad4f-8cda48b30811",
+                "alterId": 64,
+                "level": 0,
+                "security": "aes-128-gcm"
+              }
+            ],
+            "port": 443
+          }
+        ]
+      }
+    },
+    {
+      "tag": "direct",
+      "protocol": "freedom",
+      "settings": {
+        "domainStrategy": "AsIs",
+        "redirect": "",
+        "userLevel": 0
+      }
+    },
+    {
+      "tag": "block",
+      "protocol": "blackhole",
+      "settings": {
+        "response": {
+          "type": "none"
+        }
+      }
+    }
+  ],
+  "dns": {},
+  "routing": {
+    "settings": {
+      "domainStrategy": "AsIs",
+      "rules": []
+    }
+  },
+  "transport": {}
+}
